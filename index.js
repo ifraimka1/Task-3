@@ -56,20 +56,6 @@ passport.use(new LocalStrategy(
     }
 ));
 
-passport.use(new GoogleStrategy({
-    clientID: '307820205013-b1crdfgc0ll3k4qqimihd5joleabn89c.apps.googleusercontent.com',
-    clientSecret: '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',
-    callbackURL: 'http://localhost:3000/oauth2/redirect/google'
-},
-    function (issuer, profile, done) {
-        done(null, {
-            login: profile.emails[0].value,
-            name: profile.displayName
-        });
-    }
-));
-
-
 function auth(req, res, next) {
     if (req.user) {
         next();
@@ -82,22 +68,12 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
-app.get('/login/google', passport.authenticate('google', {
-    scope: ['email', 'profile']
-}));
-
 app.post('/login', passport.authenticate('local',
     {
         failureRedirect: '/login'
     }),
     (req, res) => {
         // NOT OK
-        res.redirect('/');
-    });
-
-app.get('/oauth2/redirect/google',
-    passport.authenticate('google', { failureRedirect: '/login', failureMessage: true }),
-    function (req, res) {
         res.redirect('/');
     });
 
