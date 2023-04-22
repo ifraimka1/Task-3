@@ -9,6 +9,17 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 
+const fs = require('fs');
+const userList = [];
+
+fs.readFile('./users.json', (err, data) => {
+    if (err) {
+        throw err;
+    }
+    Object.assign(userList, JSON.parse(data));
+    console.log(userList);
+});
+
 const app = express();
 const port = 3000;
 const engine = new Liquid();
@@ -31,10 +42,13 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(
     function (username, password, done) {
-        if (username == 'user' && password == '123') {
+        const user = userList.find(item => item.username == username);
+        console.log(user);
+        if (user && user.password == password) {
             done(null, {
-                login: 'user',
-                name: 'Username'
+                login: user.username,
+                name: user.name,
+                role: user.role
             });
         } else {
             done(null, false);
@@ -95,7 +109,15 @@ app.get('/logout', (req, res) => {
 
 app.get('/', auth, (req, res) => {
     res.render('home', {
-        userId: req.user.name
+        name: req.user.name,
+        role: req.user.role
+    });
+});
+
+app.get('/admin', (req, res) => {
+    res.render('admin', {
+        role: req.user.role,
+        userList: userList
     });
 });
 

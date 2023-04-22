@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  </head>
+  <body>
+    <a href="/logout">Logout</a>
+    <a href="/">Home</a>
+
+    {% if role == "admin" %}
+      <h1>Users list</h1>
+      <ol>
+        {% for user in userList %}
+          <li>
+            <div>
+              Username: {{ user.username }}<br>
+              Password: {{ user.password }}<br>
+              Name: {{ user.name }}<br>
+              Role: {{ user.role }}<br>
+            </div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <h1>Access denied</h1>
+      <p>You're not an admin.</p>
+    {% endif %}
+  </body>
+</html>
