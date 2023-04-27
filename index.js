@@ -3,7 +3,6 @@ const { Liquid } = require('liquidjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
-const userRoutes = require('./user');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -89,7 +88,7 @@ app.get('/', auth, (req, res) => {
     });
 });
 
-app.get('/admin', (req, res) => {
+app.get('/admin', auth, (req, res) => {
     res.render('admin', {
         role: req.user.role,
         userList: userList
@@ -103,7 +102,5 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
     done(null, user);
 });
-
-app.use('/user', auth, userRoutes);
 
 app.listen(port, () => console.log('started'));
