@@ -2,7 +2,6 @@ const express = require('express');
 const { Liquid } = require('liquidjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const GoogleStrategy = require('passport-google-oidc');
 
 const userRoutes = require('./user');
 const bodyParser = require('body-parser');
